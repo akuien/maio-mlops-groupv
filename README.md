@@ -42,3 +42,12 @@ The project is based on developing a small machine learning (ML) service that ca
   python app.py
   ```
 
+5. Build the image:
+  ```bash
+  docker build -t maio-mlops:v0.1 .
+  ```
+
+6. Run the image:
+  ```bash
+  docker-compose up --build
+  ```
