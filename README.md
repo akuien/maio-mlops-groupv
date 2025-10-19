@@ -17,7 +17,7 @@ The project is based on developing a small machine learning (ML) service that ca
 ### 📁 Project Structure
 ```
 │
-├── src/                                # Optional support scripts
+├── src/                             # Optional support scripts
 │
 ├── .dockerignore                    # Docker build ignore list
 ├── .gitignore                       # Git ignore list
