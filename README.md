@@ -14,6 +14,19 @@ The project is based on developing a small machine learning (ML) service that ca
 
 ---
 
+### 📁 Project Structure
+│
+├── src/                            
+├── .dockerignore
+├── .gitignore
+├── Dockerfile
+├── app.py
+├── docker-compose.yaml
+├── pythonscript.py
+├── requirements.txt
+├── README.md
+
+
 ### Installation
 #### Prerequisites
 -	Python 3.10 or above is installed
@@ -47,7 +60,7 @@ The project is based on developing a small machine learning (ML) service that ca
   docker build -t maio-mlops:v0.1 .
   ```
 
-6. Run the image:
+6. Run the container:
   ```bash
   docker-compose up --build
   ```
