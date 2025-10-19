@@ -15,8 +15,10 @@ The project is based on developing a small machine learning (ML) service that ca
 ---
 
 ### 📁 Project Structure
+```
 │
-├── src/                            
+├── src/
+│
 ├── .dockerignore
 ├── .gitignore
 ├── Dockerfile
@@ -25,7 +27,7 @@ The project is based on developing a small machine learning (ML) service that ca
 ├── pythonscript.py
 ├── requirements.txt
 └── README.md
-
+```
 
 ### Installation
 #### Prerequisites
