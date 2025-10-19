@@ -24,7 +24,7 @@ The project is based on developing a small machine learning (ML) service that ca
 ├── docker-compose.yaml
 ├── pythonscript.py
 ├── requirements.txt
-├── README.md
+└── README.md
 
 
 ### Installation
