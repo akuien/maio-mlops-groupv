@@ -17,15 +17,15 @@ The project is based on developing a small machine learning (ML) service that ca
 ### 📁 Project Structure
 ```
 │
-├── src/
+├── src/                                # Optional support scripts
 │
-├── .dockerignore
-├── .gitignore
-├── Dockerfile
-├── app.py
-├── docker-compose.yaml
-├── pythonscript.py
-├── requirements.txt
+├── .dockerignore                    # Docker build ignore list
+├── .gitignore                       # Git ignore list
+├── Dockerfile                       # Docker image definition
+├── app.py                           # API application
+├── docker-compose.yaml              # Build and run the container
+├── pythonscript.py                  # Training model
+├── requirements.txt                 # Python dependencies
 └── README.md
 ```
 
