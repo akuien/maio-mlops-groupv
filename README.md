@@ -27,4 +27,7 @@ The project is based on developing a small machine learning (ML) service that ca
   cd maio-mlops
   ```
 
-3. 
+2. Install required dependencies:
+  ```bash
+  pip install -r requirements.txt
+  ```
