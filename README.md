@@ -14,4 +14,17 @@ The project is based on developing a small machine learning (ML) service that ca
 
 ---
 
+### Installation
+#### Prerequisites
+-	Python 3.10 or above is installed
+-	Git is installed
+-	Docker is installed
 
+#### Steps
+1. Clone the repository:
+  ```bash
+  git clone https://github.com/Akuien/maio-mlops.git
+  cd maio-mlops
+  ```
+
+3. 
