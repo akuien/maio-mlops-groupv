@@ -31,3 +31,14 @@ The project is based on developing a small machine learning (ML) service that ca
   ```bash
   pip install -r requirements.txt
   ```
+
+3. Training the ML model:
+  ```bash
+  python pythonscript.py
+  ```
+
+4. Run API locally:
+  ```bash
+  python app.py
+  ```
+
