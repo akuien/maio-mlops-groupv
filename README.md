@@ -124,3 +124,26 @@ output: ``` {"prediction":210.03174809971358} ```
 
 output incase of wrong input: ``` {"detail":"Method Not Allowed"} ```
 
+
+#### Pulling versioned release from ghcr
+1. Authenticate yourself
+
+   run the command ``` gh auth login ``` and follow the instructions
+
+3. Pull the docker release image
+   
+   for version v0.1 ``` docker pull ghcr.io/akuien/maio-mlops-groupv:v0.1```
+
+   
+   for version v0.2 ``` docker pull ghcr.io/akuien/maio-mlops-groupv:v0.2 ```
+   
+
+5. Run the docker image
+
+
+   for version v0.1 ``` docker run -p 8000:8000 ghcr.io/akuien/maio-mlops-groupv:v0.1```
+
+   
+   for version v0.2 ``` docker run -p 8000:8000 ghcr.io/akuien/maio-mlops-groupv:v0.2```
+
+
