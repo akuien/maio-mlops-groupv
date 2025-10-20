@@ -1,0 +1,82 @@
+name: Release Pipeline
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies and train model
+        run: |
+          pip install -r requirements.txt
+          # For v0.2+, we switch to Ridge. Logic can be added here based on tag.
+          if [[ "${{ github.ref_name }}" == "v0.1" ]]; then
+            python scripts/train.py --model-name linear_regression
+          else
+            python scripts/train.py --model-name ridge
+          fi
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+            ghcr.io/${{ github.repository }}:latest
+          build-args: |
+            MODEL_VERSION=${{ github.ref_name }}
+          
+      - name: Run container smoke test
+        run: |
+          docker run -d --rm -p 8000:8000 --name smoke-test-container ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          sleep 10 # Give the container time to start
+          chmod +x ./smoke-test.sh
+          ./smoke-test.sh
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs: build-and-push-image
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create release notes from CHANGELOG
+        id: release_notes
+        run: |
+          VERSION="${{ github.ref_name }}"
+          NOTES=$(awk "/^## \[$VERSION\]/{flag=1; next} /^## \[/{flag=0} flag" CHANGELOG.md)
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: ${{ steps.release_notes.outputs.notes }}
+          files: |
+            artifacts/metrics.json
