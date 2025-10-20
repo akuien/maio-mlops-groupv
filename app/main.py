@@ -47,12 +47,8 @@ def _normalize_version(raw_version: str) -> str:
 
     return normalized
 
-
-
 RAW_MODEL_VERSION = os.getenv("MODEL_VERSION", _version_)
 MODEL_VERSION = _normalize_version(RAW_MODEL_VERSION)
-
-
 
 # Load the model artifact at startup
 MODEL_PATH = os.getenv("MODEL_PATH", "artifacts/model.joblib")
