@@ -1,37 +1,23 @@
-#import pytest
+import pytest
 from fastapi.testclient import TestClient
 
-# Adjust the import path based on your project structure.
-# This assumes your FastAPI app instance is named 'app' in 'app/main.py'
-
-#try:
-#    from app.main import app
-#except ModuleNotFoundError:
-    # Handle cases where the app might be in a different location
-    # This can happen in different testing setups.
-    # For this project, the above 'try' block should work.
-#    from ..app.main import app 
-
-#from app.main import app
-
 from app.main import app
+from app.patients import PATIENT_RECORDS
 
-# Create a TestClient instance for your application
-client = TestClient(app)
 
-def test_health_check():
-    """
-    Tests the /health endpoint to ensure it's running and returns the correct status.
-    """
+@pytest.fixture(scope="module")
+def client() -> TestClient:
+    with TestClient(app) as test_client:
+        yield test_client
+
+
+def test_health_check(client: TestClient):
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "ok", "model_version": app.version}
 
-def test_predict_endpoint_success():
-    """
-    Tests the /predict endpoint with a valid payload to ensure it returns a successful prediction.
-    """
-    # Define a valid sample payload that matches your Pydantic model
+
+def test_predict_endpoint_success(client: TestClient):
     valid_payload = {
         "age": 0.038,
         "sex": 0.05,
@@ -42,27 +28,19 @@ def test_predict_endpoint_success():
         "s3": -0.043,
         "s4": -0.002,
         "s5": 0.019,
-        "s6": -0.017
+        "s6": -0.017,
     }
 
     response = client.post("/predict", json=valid_payload)
-    
-    # Assert that the request was successful
+
     assert response.status_code == 200
-    
-    # Assert that the response body contains the "prediction" key
+
     response_data = response.json()
     assert "prediction" in response_data
-    
-    # Assert that the prediction value is a float
     assert isinstance(response_data["prediction"], float)
 
-def test_predict_endpoint_invalid_payload():
-    """
-    Tests the /predict endpoint with an invalid payload to ensure it handles errors correctly.
-    FastAPI and Pydantic should automatically return a 422 Unprocessable Entity status.
-    """
-    # This payload is missing the 'age' field
+
+def test_predict_endpoint_invalid_payload(client: TestClient):
     invalid_payload = {
         "sex": 0.05,
         "bmi": 0.061,
@@ -72,10 +50,32 @@ def test_predict_endpoint_invalid_payload():
         "s3": -0.043,
         "s4": -0.002,
         "s5": 0.019,
-        "s6": -0.017
+        "s6": -0.017,
     }
 
     response = client.post("/predict", json=invalid_payload)
-    
-    # Assert that the application correctly identifies the invalid data
+
     assert response.status_code == 422
+
+
+def test_dashboard_orders_patients_by_prediction(client: TestClient):
+    response = client.get("/dashboard")
+    assert response.status_code == 200
+
+    body = response.text
+
+    predictions = []
+    for patient in PATIENT_RECORDS:
+        prediction_response = client.post("/predict", json=patient["features"])
+        assert prediction_response.status_code == 200
+        prediction_value = prediction_response.json()["prediction"]
+        predictions.append((patient["name"], prediction_value))
+
+    predictions.sort(key=lambda item: item[1], reverse=True)
+
+    last_position = -1
+    for name, _ in predictions:
+        position = body.find(name)
+        assert position != -1
+        assert position > last_position
+        last_position = position
