@@ -146,4 +146,6 @@ output incase of wrong input: ``` {"detail":"Method Not Allowed"} ```
    
    for version v0.2 ``` docker run -p 8000:8000 ghcr.io/akuien/maio-mlops-groupv:v0.2```
 
+You can view all version updates, fixes, and release notes in the [CHANGELOG.md](./CHANGELOG.md).
+
 
