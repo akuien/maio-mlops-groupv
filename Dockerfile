@@ -8,6 +8,7 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV MODEL_PATH /app/artifacts/model.joblib
+ENV MODEL_VERSION v0.x
 
 # Copy requirements file and install dependencies first to leverage Docker cache
 COPY requirements.txt .
