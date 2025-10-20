@@ -4,11 +4,14 @@ FROM python:3.10-slim
 # Set the working directory inside the container
 WORKDIR /app
 
+#build arg
+ARG MODEL_VERSION=v0.0.0-dev
+
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV MODEL_VERSION=$MODEL_VERSION
 ENV MODEL_PATH /app/artifacts/model.joblib
-ENV MODEL_VERSION v0.x
 
 # Copy requirements file and install dependencies first to leverage Docker cache
 COPY requirements.txt .

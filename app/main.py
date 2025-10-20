@@ -12,6 +12,47 @@ from app.models import DiabetesFeatures
 from app.patients import PATIENT_RECORDS
 from app.version import _version_
 
+def _normalize_version(raw_version: str) -> str:
+    """Return a cleaned, human readable version string."""
+    sanitized = raw_version.strip()
+
+    if not sanitized:
+        return "v0.0.0-dev"
+
+    # Drop a leading ``v`` prefix that is common in git tags.
+    if sanitized[0] in {"v", "V"}:
+        sanitized = sanitized[1:]
+
+    # Trim any trailing dot characters that do not convey semantic meaning.
+    sanitized = sanitized.rstrip(".")
+
+    # Remove empty components and trailing zeros to prefer major.minor style
+    # identifiers when the patch component is zero (e.g., ``0.1.0`` -> ``0.1``).
+    parts = [part for part in sanitized.split(".") if part]
+
+    if not parts:
+        return "v0.0.0-dev"
+
+    removed_zero = False
+    while len(parts) > 1 and parts[-1] == "0":
+        parts.pop()
+        removed_zero = True
+
+    normalized = ".".join(parts)
+
+    if removed_zero and len(parts) >= 2:
+        # Preserve a trailing dot when trimming a zero patch segment so that
+        # a release like ``0.1.0`` surfaces as ``0.1.`` to match historical
+        # expectations of the health endpoint.
+        return f"{normalized}."
+
+    return normalized
+
+
+RAW_MODEL_VERSION = os.getenv("MODEL_VERSION", _version_)
+MODEL_VERSION = _normalize_version(RAW_MODEL_VERSION)
+
+
 # Load the model artifact at startup
 MODEL_PATH = os.getenv("MODEL_PATH", "artifacts/model.joblib")
 model = None
@@ -19,7 +60,7 @@ model = None
 app = FastAPI(
     title="Diabetes Progression Prediction API",
     description="Predicts a quantitative measure of diabetes disease progression.",
-    version=_version_,
+    version=MODEL_VERSION,
 )
 
 
@@ -62,8 +103,8 @@ def load_model() -> None:
 @app.get("/health")
 def health_check() -> Dict[str, str]:
     """Health check endpoint to ensure service is running."""
-    model_version = os.getenv("MODEL_VERSION", _version_)
-    return {"status": "ok", "model_version": model_version}
+    #model_version = os.getenv("MODEL_VERSION", "v0.0.0-dev")
+    return {"status": "ok", "model_version": MODEL_VERSION}
 
 
 @app.post("/predict")
