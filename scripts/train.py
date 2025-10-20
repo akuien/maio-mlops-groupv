@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import joblib
+#import pandas as pd
 from sklearn.datasets import load_diabetes
 from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.metrics import mean_squared_error
@@ -10,9 +11,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from numpy import sqrt
 
+
 # Create artifacts directory if it doesn't exist
 os.makedirs("artifacts", exist_ok=True)
-
 
 def train(model_name: str = "linear_regression", random_seed: int = 42):
     """Trains a model and saves it along with metrics."""
@@ -31,7 +32,10 @@ def train(model_name: str = "linear_regression", random_seed: int = 42):
         model = LinearRegression()
 
     # Create a preprocessing and training pipeline
-    pipeline = Pipeline([("scaler", StandardScaler()), ("regressor", model)])
+    pipeline = Pipeline([
+        ('scaler', StandardScaler()),
+        ('regressor', model)
+    ])
 
     # Train the model
     pipeline.fit(X_train, y_train)
@@ -50,22 +54,18 @@ def train(model_name: str = "linear_regression", random_seed: int = 42):
     # Save metrics
     metrics = {"rmse": rmse}
     metrics_path = "artifacts/metrics.json"
-    with open(metrics_path, "w") as f:
+    with open(metrics_path, 'w') as f:
         json.dump(metrics, f, indent=4)
     print(f"Metrics saved to {metrics_path}")
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--model-name",
-        type=str,
-        default="linear_regression",
-        help="Model to train (linear_regression or ridge)",
+        "--model-name", type=str, default="linear_regression",
+        help="Model to train (linear_regression or ridge)"
     )
     parser.add_argument(
         "--random-seed", type=int, default=42, help="Random seed for reproducibility"
     )
     args = parser.parse_args()
     train(model_name=args.model_name, random_seed=args.random_seed)
-
