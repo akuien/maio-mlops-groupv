@@ -40,6 +40,7 @@ The project is based on developing a small machine learning (ML) service that ca
 ├── Dockerfile                     # Docker image definition
 ├── smoke-test.sh                  # Check the app or built container
 ├── requirements.txt               # Python dependencies
+├── CHANGELOG.md
 └── README.md
 ```
 
