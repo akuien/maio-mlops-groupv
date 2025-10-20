@@ -14,7 +14,7 @@ The project is based on developing a small machine learning (ML) service that ca
 
 ---
 
-### 📁 Project Structure
+### 📁 Project Structure -- to be updated to reflect the new one
 ```
 │
 ├── src/                             # Optional support scripts
@@ -35,34 +35,77 @@ The project is based on developing a small machine learning (ML) service that ca
 -	Git is installed
 -	Docker is installed
 
-#### Steps
+#### Steps for reproducibility 
 1. Clone the repository:
   ```bash
-  git clone https://github.com/Akuien/maio-mlops.git
-  cd maio-mlops
+  https://github.com/akuien/maio-mlops-groupv.git
+  cd maio-mlops-groupv/
   ```
 
-2. Install required dependencies:
+2. Create python virtual environment
+``` bash
+  python3 -m venv .venv
+  source .venv/bin/activate
+  pip install --upgrade pip
+```
+
+3. Install required dependencies:
   ```bash
   pip install -r requirements.txt
   ```
 
 3. Training the ML model:
   ```bash
-  python pythonscript.py
+  python scripts/train.py 
   ```
 
 4. Run API locally:
   ```bash
-  python app.py
+  uvicorn app.main:app --host 0.0.0.0 --port 8000
   ```
 
 5. Build the image:
   ```bash
-  docker build -t maio-mlops:v0.1 .
+  docker build -t virtual-triage:latest . 
   ```
 
 6. Run the container:
   ```bash
-  docker-compose up --build
+  docker run -p 8000:8000 virtual-triage  
   ```
+
+7. View Triage Dashboard
+   ```
+   follow the link: http://0.0.0.0:8000/
+   ```
+ <img width="1005" height="464" alt="image" src="https://github.com/user-attachments/assets/d4c7b426-0cc0-409b-9b74-79a0bd90e61a" />
+  
+
+8. Test /health endpoint
+  ```
+curl -s http://localhost:8000/health
+```
+output: ``` {"status":"ok","model_version":"0.1.0"} ```
+   
+9. Test /predict endpoint 
+```
+  curl -s -X POST http://localhost:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "age": 0.038,
+    "sex": 0.05,
+    "bmi": 0.061,
+    "bp": 0.021,
+    "s1": -0.044,
+    "s2": -0.034,
+    "s3": -0.043,
+    "s4": -0.002,
+    "s5": 0.019,
+    "s6": -0.017
+  }'
+
+   ```
+output: ``` {"prediction":210.03174809971358} ```
+
+output incase of wrong input: ``` {"detail":"Method Not Allowed"} ```
+
