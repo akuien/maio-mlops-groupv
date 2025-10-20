@@ -11,8 +11,6 @@ from app.models import DiabetesFeatures
 from app.patients import PATIENT_RECORDS
 from app.version import _version_
 
-
-
 def _normalize_version(raw_version: str) -> str:
     """Return a cleaned, human readable version string."""
     sanitized = raw_version.strip()
@@ -50,8 +48,10 @@ def _normalize_version(raw_version: str) -> str:
     return normalized
 
 
+
 RAW_MODEL_VERSION = os.getenv("MODEL_VERSION", _version_)
 MODEL_VERSION = _normalize_version(RAW_MODEL_VERSION)
+
 
 
 # Load the model artifact at startup
