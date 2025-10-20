@@ -2,7 +2,6 @@ import argparse
 import json
 import os
 import joblib
-#import pandas as pd
 from sklearn.datasets import load_diabetes
 from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.metrics import mean_squared_error
@@ -10,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from numpy import sqrt
+
 
 
 # Create artifacts directory if it doesn't exist
@@ -25,7 +25,7 @@ def train(model_name: str = "linear_regression", random_seed: int = 42):
         X, y, test_size=0.2, random_state=random_seed
     )
 
-    # Define model
+    # Define model, v0.2 should automatically go to ridge
     if model_name == "ridge":
         model = Ridge(alpha=0.1, random_state=random_seed)
     else:
