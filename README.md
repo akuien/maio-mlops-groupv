@@ -14,7 +14,7 @@ The project is based on developing a small machine learning (ML) service that ca
 
 ---
 
-### 📁 Project Structure -- to be updated to reflect the new one
+### 📁 Project Structure 
 ```
 │
 ├── .github/workflows/             # Pipelines
@@ -68,40 +68,40 @@ The project is based on developing a small machine learning (ML) service that ca
   pip install -r requirements.txt
   ```
 
-3. Training the ML model:
+4. Training the ML model:
   ```bash
   python scripts/train.py 
   ```
 
-4. Run API locally:
+5. Run API locally:
   ```bash
   uvicorn app.main:app --host 0.0.0.0 --port 8000
   ```
 
-5. Build the image:
+6. Build the image:
   ```bash
   docker build -t virtual-triage:latest . 
   ```
 
-6. Run the container:
+7. Run the container:
   ```bash
   docker run -p 8000:8000 virtual-triage  
   ```
 
-7. View Triage Dashboard
+8. View Triage Dashboard
    ```
    follow the link: http://0.0.0.0:8000/
    ```
  <img width="1005" height="464" alt="image" src="https://github.com/user-attachments/assets/d4c7b426-0cc0-409b-9b74-79a0bd90e61a" />
   
 
-8. Test /health endpoint
+9. Test /health endpoint
   ```
 curl -s http://localhost:8000/health
 ```
 output: ``` {"status":"ok","model_version":"0.1.0"} ```
    
-9. Test /predict endpoint 
+10. Test /predict endpoint 
 ```
   curl -s -X POST http://localhost:8000/predict \
   -H "Content-Type: application/json" \
