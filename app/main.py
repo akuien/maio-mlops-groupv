@@ -1,5 +1,4 @@
 """FastAPI application exposing prediction and dashboard endpoints."""
-
 import os
 from typing import Any, Dict, List
 
@@ -11,6 +10,8 @@ from fastapi.responses import HTMLResponse
 from app.models import DiabetesFeatures
 from app.patients import PATIENT_RECORDS
 from app.version import _version_
+
+
 
 def _normalize_version(raw_version: str) -> str:
     """Return a cleaned, human readable version string."""
