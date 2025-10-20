@@ -13,6 +13,7 @@ from app.version import _version_
 
 
 
+
 def _normalize_version(raw_version: str) -> str:
     """Return a cleaned, human readable version string."""
     sanitized = raw_version.strip()
