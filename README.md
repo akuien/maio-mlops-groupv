@@ -17,15 +17,29 @@ The project is based on developing a small machine learning (ML) service that ca
 ### 📁 Project Structure -- to be updated to reflect the new one
 ```
 │
-├── src/                             # Optional support scripts
+├── .github/workflows/             # Pipelines
+│  ├─ ci.yaml
+│  └── release.yml
 │
-├── .dockerignore                    # Docker build ignore list
-├── .gitignore                       # Git ignore list
-├── Dockerfile                       # Docker image definition
-├── app.py                           # API application
-├── docker-compose.yaml              # Build and run the container
-├── pythonscript.py                  # Training model
-├── requirements.txt                 # Python dependencies
+├── app/                           # API application
+│  ├─ __init__.py
+│  ├─ main.py
+│  ├─ models.py
+│  ├─ patients.py
+│  └── version.py
+│
+├── scripts/                       # Training model
+│  └── train.py
+│
+├── tests/                         # Test package
+│  ├─ conftest.py
+│  └── test_api.py
+│
+├── .dockerignore                  # Docker build ignore list
+├── .gitignore                     # Git ignore list
+├── Dockerfile                     # Docker image definition
+├── smoke-test.sh                  # Check the app or built container
+├── requirements.txt               # Python dependencies
 └── README.md
 ```
 
